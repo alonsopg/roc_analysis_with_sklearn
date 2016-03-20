@@ -1,0 +1,494 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass{article}
+
+    
+    
+    \usepackage{graphicx} % Used to insert images
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{color} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    
+
+    
+    
+    \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+    \definecolor{darkorange}{rgb}{.71,0.21,0.01}
+    \definecolor{darkgreen}{rgb}{.12,.54,.11}
+    \definecolor{myteal}{rgb}{.26, .44, .56}
+    \definecolor{gray}{gray}{0.45}
+    \definecolor{lightgray}{gray}{.95}
+    \definecolor{mediumgray}{gray}{.8}
+    \definecolor{inputbackground}{rgb}{.95, .95, .85}
+    \definecolor{outputbackground}{rgb}{.95, .95, .95}
+    \definecolor{traceback}{rgb}{1, .95, .95}
+    % ansi colors
+    \definecolor{red}{rgb}{.6,0,0}
+    \definecolor{green}{rgb}{0,.65,0}
+    \definecolor{brown}{rgb}{0.6,0.6,0}
+    \definecolor{blue}{rgb}{0,.145,.698}
+    \definecolor{purple}{rgb}{.698,.145,.698}
+    \definecolor{cyan}{rgb}{0,.698,.698}
+    \definecolor{lightgray}{gray}{0.5}
+    
+    % bright ansi colors
+    \definecolor{darkgray}{gray}{0.25}
+    \definecolor{lightred}{rgb}{1.0,0.39,0.28}
+    \definecolor{lightgreen}{rgb}{0.48,0.99,0.0}
+    \definecolor{lightblue}{rgb}{0.53,0.81,0.92}
+    \definecolor{lightpurple}{rgb}{0.87,0.63,0.87}
+    \definecolor{lightcyan}{rgb}{0.5,1.0,0.83}
+    
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{ROC analysis with Support Vectors Machines}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=blue,
+      linkcolor=darkorange,
+      citecolor=darkgreen,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \section{ROC Analysis for Multiclass
+SVMs}\label{roc-analysis-for-multiclass-svms}
+
+    El analisis ROC es util para ilustrar el rendimiento de un clasificador
+generalmente binario (este ejemplo es la extención para el caso
+multiclase). La curva se hace graficando la tasa de verdaderos positivos
+( i.e.~TRP, recall, sensitividad) contra la tasa de falsos positivos
+(i.e.~FRP, especificidad, fallout) según los diferentes ajustes de
+umbral.
+
+    \subsection{True Positive Rate and False Positive
+Rate}\label{true-positive-rate-and-false-positive-rate}
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn.feature\PYZus{}extraction.text} \PY{k+kn}{import} \PY{n}{TfidfVectorizer}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn.cross\PYZus{}validation} \PY{k+kn}{import} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{,} \PY{n}{cross\PYZus{}val\PYZus{}score}
+         
+         
+         \PY{n}{tfidf\PYZus{}vect}\PY{o}{=} \PY{n}{TfidfVectorizer}\PY{p}{(}\PY{n}{use\PYZus{}idf}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{smooth\PYZus{}idf}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{sublinear\PYZus{}tf}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{,} \PY{n}{ngram\PYZus{}range}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k+kn}{as} \PY{n+nn}{pd}
+         
+         \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{/Users/user/Tesis/escritorio\PYZus{}anterior/MICAI/todos.csv}\PY{l+s}{\PYZsq{}}\PY{p}{,}
+                          \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{,}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{id}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{content}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{label}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{df}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}19}]:}                                                  id  \textbackslash{}
+         0     AEG\_Electrolux\_60840\_Lavamat\_\_Opinion\_1506705   
+         1     AEG\_Electrolux\_62610\_Lavamat\_\_Opinion\_2000923   
+         2          AEG\_Electrolux\_L14800VI\_\_Opinion\_2005396   
+         3           AEG\_Electrolux\_L6227FL\_\_Opinion\_2140710   
+         4          AEG\_Electrolux\_L62280FL\_\_Opinion\_2151025   
+         5          AEG\_Electrolux\_L62642VI\_\_Opinion\_1995158   
+         6          AEG\_Electrolux\_L62642VI\_\_Opinion\_1995791   
+         7          AEG\_Electrolux\_L70470FL\_\_Opinion\_2085167   
+         8            AEG\_Electrolux\_L74650\_\_Opinion\_1856967   
+         9         AEG\_Electrolux\_L85275XFL\_\_Opinion\_2138100   
+         10        AEG\_Electrolux\_L\_14950\_A\_\_Opinion\_2103767   
+         11          AEG\_Electrolux\_L\_47185\_\_Opinion\_1492496   
+         12          AEG\_Electrolux\_L\_47185\_\_Opinion\_1818711   
+         13          AEG\_Electrolux\_L\_47186\_\_Opinion\_1370192   
+         14        AEG\_Electrolux\_L\_47330\_A\_\_Opinion\_2087353   
+         15           AEG\_Electrolux\_L\_5214\_\_Opinion\_1437024   
+         16          AEG\_Electrolux\_L\_62825\_\_Opinion\_1469992   
+         17       AEG\_Electrolux\_L\_70270\_FL\_\_Opinion\_2090317   
+         18       AEG\_Electrolux\_L\_70270\_FL\_\_Opinion\_2143750   
+         19       AEG\_Electrolux\_L\_70270\_FL\_\_Opinion\_2150873   
+         20       AEG\_Electrolux\_L\_70270\_FL\_\_Opinion\_2152723   
+         21          AEG\_Electrolux\_L\_70810\_\_Opinion\_1263244   
+         22          AEG\_Electrolux\_L\_70810\_\_Opinion\_1277946   
+         23          AEG\_Electrolux\_L\_70810\_\_Opinion\_1284085   
+         24          AEG\_Electrolux\_L\_70810\_\_Opinion\_1372777   
+         25          AEG\_Electrolux\_L\_70810\_\_Opinion\_1848780   
+         26          AEG\_Electrolux\_L\_70850\_\_Opinion\_1448444   
+         27          AEG\_Electrolux\_L\_70850\_\_Opinion\_2007327   
+         28         AEG\_Electrolux\_L\_725500\_\_Opinion\_1791610   
+         29         AEG\_Electrolux\_L\_725500\_\_Opinion\_1794746   
+         {\ldots}                                             {\ldots}   
+         2568            Zanussi\_ZWH\_6101\_P\_\_Opinion\_1999819   
+         2569            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2001127   
+         2570            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2001296   
+         2571            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2001662   
+         2572            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2006735   
+         2573            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2007532   
+         2574            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2009115   
+         2575            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2026016   
+         2576            Zanussi\_ZWH\_6101\_P\_\_Opinion\_2027055   
+         2577           Zanussi\_ZWH\_6102\_PS\_\_Opinion\_2138338   
+         2578              Zanussi\_ZWH\_6120\_\_Opinion\_1981065   
+         2579              Zanussi\_ZWH\_6120\_\_Opinion\_2136981   
+         2580              Zanussi\_ZWH\_6125\_\_Opinion\_1701351   
+         2581            Zanussi\_ZWH\_7120\_P\_\_Opinion\_2005676   
+         2582            Zanussi\_ZWH\_7120\_P\_\_Opinion\_2132623   
+         2583            Zanussi\_ZWH\_7125\_X\_\_Opinion\_2083788   
+         2584            Zanussi\_ZWH\_7125\_X\_\_Opinion\_2127841   
+         2585              Zanussi\_ZWK\_5100\_\_Opinion\_1526854   
+         2586              Zanussi\_ZWK\_6120\_\_Opinion\_1613313   
+         2587              Zanussi\_ZWN\_5105\_\_Opinion\_2122850   
+         2588              Zanussi\_ZWN\_6105\_\_Opinion\_2004500   
+         2589              Zanussi\_ZWN\_6120\_\_Opinion\_2084720   
+         2590             Zanussi\_ZWN\_7100L\_\_Opinion\_2093055   
+         2591            Zanussi\_ZWN\_7120\_L\_\_Opinion\_2131960   
+         2592              Zanussi\_ZWN\_7125\_\_Opinion\_2093504   
+         2593              Zanussi\_ZWQ\_5100\_\_Opinion\_2138972   
+         2594              Zanussi\_ZWQ\_5109\_\_Opinion\_2094551   
+         2595               Zanussi\_ZWQ\_598\_\_Opinion\_2004693   
+         2596               Zanussi\_ZWT\_260\_\_Opinion\_1091527   
+         2597               Zanussi\_ZWT\_260\_\_Opinion\_1157262   
+         
+                                                         content  label  
+         0     programa especial ropa sensible planchado f\textbackslash{}xe{\ldots}      5  
+         1     carga superior punto medio color blanco carga {\ldots}      4  
+         2     carga superior forma frontal programa majo efi{\ldots}      5  
+         3     modelo electroluxmuy fácil altamente satisfact{\ldots}      4  
+         4     clasificación energético sonido bajo conversac{\ldots}      4  
+         5     ficha tecnica programa especial prenda delicad{\ldots}      5  
+         6     habitación principal control electrónico clasi{\ldots}      4  
+         7     clasificación energético fase anterior lavado {\ldots}      4  
+         8     capazidad grande entender mucho muy simple muy{\ldots}      3  
+         9     temperatura medio ciclo medio factor determina{\ldots}      5  
+         10    empresa alemán agua eléctrico plancha eléctric{\ldots}      4  
+         11    lavadora nuevo tipo energético carga igual ten{\ldots}      4  
+         12    carga lateral carga superior mas caro no durar{\ldots}      1  
+         13    eta lavador carga superior ropa listo planchar{\ldots}      4  
+         14    lavadora normal persona principal acero inoxid{\ldots}      4  
+         15    detalle técnico punto central carga máximo cat{\ldots}      5  
+         16    quedar muy funcionar correctamente demasiado g{\ldots}      4  
+         17    mancha difícil ropa delicado lavadora normal c{\ldots}      4  
+         18    móvil directo horno pirolitico frigorifico ame{\ldots}      5  
+         19    móvil directo horno pirolitico frigorifico ame{\ldots}      5  
+         20    echar nada seguir as\textbackslash{}xc3\textbackslash{}xad mucho menor muy c{\ldots}      4  
+         21    uso electronico lavadora viejo influir mucho e{\ldots}      4  
+         22    tiempo remanente programación electrónico cont{\ldots}      5  
+         23    manejo diario ubicar comodamente bastante buen{\ldots}      5  
+         24    capacidad generoso aspecto exterior anchura ex{\ldots}      3  
+         25    mancha gris esla lavador uso suavizante ropa b{\ldots}      3  
+         26    acero inoxidable principio atractivo familia n{\ldots}      4  
+         27    tamaño medio parte superior color azul color b{\ldots}      5  
+         28    manera sincero clasificación energético tiempo{\ldots}      4  
+         29    producto similarmuy bueno muy accesible muy fa{\ldots}      4  
+         {\ldots}                                                 {\ldots}    {\ldots}  
+         2568  aspecto general uso diario clasificación energ{\ldots}      4  
+         2569  clasificación energético control electrónico s{\ldots}      4  
+         2570  consumo energético ahorro energético medir más{\ldots}      4  
+         2571  pronombre neutro lavadora antiguo color blanco{\ldots}      3  
+         2572  lavadora nuevo tener ya poco ruidoso muy contento      4  
+         2573      cliente contento móvil directo esforzar mucho      5  
+         2574  dimensión alto sistema aclarador eficacia ener{\ldots}      5  
+         2575      cliente contento móvil directo esforzar mucho      5  
+         2576      cliente contento móvil directo esforzar mucho      5  
+         2577  lavado super mas seco lavar bien salir tan acl{\ldots}      3  
+         2578  reducir bastante poner bastante tener muy bast{\ldots}      4  
+         2579  carga amplio lavadora viejo carga frontal ocup{\ldots}      4  
+         2580  parte superior servicio oficial servicio tecni{\ldots}      2  
+         2581  proceso actual broma jaja carga máximo sistema{\ldots}      4  
+         2582  eficiencia energético cuanto principal lavador{\ldots}      3  
+         2583  lavado diario pantalla digital sistema antihue{\ldots}      4  
+         2584  móvil directo horno pirolitico frigorifico ame{\ldots}      5  
+         2585  piso atiguo clasificacion energeticamuy bueno {\ldots}      4  
+         2586  carga superior carga frontal carga frontal lav{\ldots}      5  
+         2587  prenda grande clasificación energético clasifi{\ldots}      4  
+         2588  lavadora fantástico display digital parte supe{\ldots}      4  
+         2589  salir más hacer ya durar tanto tener hoy muy a{\ldots}      3  
+         2590  prenda grande clasificación energético clasifi{\ldots}      5  
+         2591                                               null      5  
+         2592  corporación sueco uso doméstico placa vitrocer{\ldots}      4  
+         2593  euro aprox carga superior control estándar lav{\ldots}      4  
+         2594  lavadora fiable clasificación energético súper{\ldots}      4  
+         2595  mas grande display digitalmuy fácil no estrope{\ldots}      2  
+         2596  año aprox cosa raro utilizar mucho salir muy i{\ldots}      2  
+         2597  lavadora normal lavadora pequeño pensar muy ce{\ldots}      5  
+         
+         [2598 rows x 3 columns]
+\end{Verbatim}
+        
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{X} \PY{o}{=} \PY{n}{tfidf\PYZus{}vect}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{content}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+         \PY{n}{y} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{label}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{c}{\PYZsh{} Binarize the output}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn.preprocessing} \PY{k+kn}{import} \PY{n}{label\PYZus{}binarize}
+         
+         \PY{n}{y} \PY{o}{=} \PY{n}{label\PYZus{}binarize}\PY{p}{(}\PY{n}{y}\PY{p}{,} \PY{n}{classes}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+         \PY{n}{n\PYZus{}classes} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{n}{random\PYZus{}state} \PY{o}{=} \PY{l+m+mi}{0}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{c}{\PYZsh{} shuffle and split training and test sets}
+         \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.33}\PY{p}{,}\PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{c}{\PYZsh{} Learn to predict each class against the other}
+         \PY{c}{\PYZsh{}from sklearn.ensemble import AdaBoostClassifier}
+         
+         \PY{k+kn}{from} \PY{n+nn}{sklearn.svm} \PY{k+kn}{import} \PY{n}{SVC}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn.multiclass} \PY{k+kn}{import} \PY{n}{OneVsRestClassifier}
+         
+         
+         \PY{n}{classifier} \PY{o}{=} \PY{n}{OneVsRestClassifier}\PY{p}{(}\PY{n}{SVC}\PY{p}{(}\PY{n}{kernel} \PY{o}{=} \PY{l+s}{\PYZsq{}}\PY{l+s}{linear}\PY{l+s}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y\PYZus{}score} \PY{o}{=} \PY{n}{classifier}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}\PY{o}{.}\PY{n}{decision\PYZus{}function}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c}{\PYZsh{} Compute ROC curve and ROC area for each class}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn.metrics} \PY{k+kn}{import} \PY{n}{roc\PYZus{}curve}\PY{p}{,} \PY{n}{auc}
+         
+         \PY{n}{fpr} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{)}
+         \PY{n}{tpr} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{)}
+         \PY{n}{roc\PYZus{}auc} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}classes}\PY{p}{)}\PY{p}{:}
+             \PY{n}{fpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{roc\PYZus{}curve}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}score}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{p}{)}
+             \PY{n}{roc\PYZus{}auc}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{auc}\PY{p}{(}\PY{n}{fpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c}{\PYZsh{} Compute micro\PYZhy{}average ROC curve and ROC area}
+         \PY{n}{fpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{roc\PYZus{}curve}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{y\PYZus{}score}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n}{roc\PYZus{}auc}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{auc}\PY{p}{(}\PY{n}{fpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+         
+         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+         
+         \PY{c}{\PYZsh{} Plot of a ROC curve for a specific class}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{fpr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{ROC curve (area = }\PY{l+s+si}{\PYZpc{}0.2f}\PY{l+s}{)}\PY{l+s}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{roc\PYZus{}auc}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{k\PYZhy{}\PYZhy{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{]}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.05}\PY{p}{]}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{False Positive Rate}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{True Positive Rate}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Receiver operating characteristic example}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{lower right}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{ROC analysis with Support Vectors Machines_files/ROC analysis with Support Vectors Machines_9_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{c}{\PYZsh{} Plot ROC curve}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{fpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                  \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{micro\PYZhy{}average ROC curve (area = \PYZob{}0:0.2f\PYZcb{})}\PY{l+s}{\PYZsq{}}
+                        \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{roc\PYZus{}auc}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{micro}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}classes}\PY{p}{)}\PY{p}{:}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{fpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{tpr}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{curva ROC para la clase \PYZob{}0\PYZcb{} (area = \PYZob{}1:0.2f\PYZcb{})}\PY{l+s}{\PYZsq{}}
+                                            \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{roc\PYZus{}auc}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{k\PYZhy{}\PYZhy{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{]}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.05}\PY{p}{]}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Tasa de FP}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Tasa de VP}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Curva ROC para el caso multi\PYZhy{}clase}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{lower right}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{ROC analysis with Support Vectors Machines_files/ROC analysis with Support Vectors Machines_10_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
